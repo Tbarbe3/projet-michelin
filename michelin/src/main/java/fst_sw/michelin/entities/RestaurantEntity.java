@@ -26,10 +26,10 @@ public class RestaurantEntity {
     private String name;
 
     @NotBlank
-    @Column(name = "adress")
+    @Column(name = "address")
     @Getter @Setter
     @Size(max=255)
-    private String adress;
+    private String address;
 
     @Column(name = "image")
     @Getter @Setter

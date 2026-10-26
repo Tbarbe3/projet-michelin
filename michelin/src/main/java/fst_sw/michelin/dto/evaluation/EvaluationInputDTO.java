@@ -1,8 +1,9 @@
-package fst_sw.demo.dto.comments;
+package fst_sw.michelin.dto.evaluation;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentInputDTO
+public class EvaluationInputDTO
 {
     @NotBlank
+    @Size(max=50)
     public String name;
 
     @NotBlank
-    public String text;
+    @Size(max=255)
+    public String comment;
 
     @Min(0)
     @Max(10)
