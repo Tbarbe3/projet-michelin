@@ -6,6 +6,7 @@ import fst_sw.michelin.dto.ImageUrlDTO;
 import fst_sw.michelin.services.RestaurantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,17 +29,20 @@ public class RestaurantController {
         return RestaurantDTO.fromEntity(this.restaurantService.getRestaurant(id));
     }
 
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public RestaurantDTO addRestaurant(@Valid @RequestBody RestaurantInputDTO restaurant) {
         return RestaurantDTO.fromEntity(
                 this.restaurantService.createRestaurant(restaurant.name, restaurant.address));
     }
 
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("/{id}")
-    public void modifyRestaurant(@PathVariable int id, @Valid @RequestBody RestaurantDTO restaurant) {
+    public void modifyRestaurant(@PathVariable int id, @Valid @RequestBody RestaurantInputDTO restaurant) {
         this.restaurantService.updateRestaurant(id, restaurant.name, restaurant.address);
     }
 
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/image")
     public ImageUrlDTO addRestaurantImage(@PathVariable int id) {
         return new ImageUrlDTO(this.restaurantService.createRestaurantImageUploadUrl(id));
