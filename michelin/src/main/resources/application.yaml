@@ -23,7 +23,7 @@ spring:
 s3:
   endpoint: https://s3.bober.ovh
   buckets:
-    cover: ${S3_BUCKET_COVER:exo-cover}
-    screenshot: ${S3_BUCKET_SCREENSHOT:exo-screenshot}
-  access-key: ${S3_ACCESS_KEY}
-  secret-key: ${S3_SECRET_KEY}
+    evaluation: evaluation
+    restaurant: restaurant
+  access-key: cqBlF80IVJrc1isWW6oK
+  secret-key: KPJlY826Qi0d952w4GWmQIvA0zfvWi62hvIyiZlT
