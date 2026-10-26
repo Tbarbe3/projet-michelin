@@ -1,4 +1,4 @@
-package fst_sw.demo.dto.series;
+package fst_sw.michelin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

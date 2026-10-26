@@ -15,7 +15,7 @@ public class EvaluationDTO {
     public int id;
 
     @Size(max=50)
-    public String name;
+    public String author;
 
     @Size(max=255)
     public String comment;
@@ -27,7 +27,7 @@ public class EvaluationDTO {
     public static EvaluationDTO fromEntity(EvaluationEntity evaluationEntity) {
         return EvaluationDTO.builder()
                 .id(evaluationEntity.getId())
-                .name(evaluationEntity.getName())
+                .author(evaluationEntity.getAuthor())
                 .comment(evaluationEntity.getComment())
                 .rate(evaluationEntity.getRate())
                 .build();

@@ -15,7 +15,7 @@ public class EvaluationInputDTO
 {
     @NotBlank
     @Size(max=50)
-    public String name;
+    public String author;
 
     @NotBlank
     @Size(max=255)

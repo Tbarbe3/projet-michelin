@@ -20,10 +20,10 @@ public class EvaluationEntity {
     private int id;
 
     @NotBlank
-    @Column(name = "name")
+    @Column(name = "author")
     @Size(max=50)
     @Getter @Setter
-    private String name;
+    private String author;
 
     @NotBlank
     @Column(name = "comment")
