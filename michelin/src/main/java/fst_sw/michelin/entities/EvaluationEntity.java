@@ -5,12 +5,15 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="evaluation")
 public class EvaluationEntity {
     @Id
@@ -42,7 +45,8 @@ public class EvaluationEntity {
     @Getter @Setter
     private RestaurantEntity restaurant;
 
-    @Column(name = "dishes_pictures")
-    @Getter @Setter
-    private Collection<String> dishesPictures;
+    @ElementCollection
+    @Getter
+    @Builder.Default
+    private List<String> dishesPictures = new ArrayList<>();
 }

@@ -1,13 +1,13 @@
-package fst_sw.demo;
+package fst_sw.michelin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class MichelinApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(MichelinApplication.class, args);
 	}
 
 }

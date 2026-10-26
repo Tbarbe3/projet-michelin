@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.OptionalDouble;
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,14 +20,14 @@ public class RestaurantDTO {
     @Size(max=255)
     public String address;
 
-    public OptionalDouble averageRate;
+    public double averageRate;
 
     public static RestaurantDTO fromEntity(RestaurantEntity entity) {
         return RestaurantDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .address(entity.getAddress())
-                .averageRate(entity.getEvaluations().stream().mapToInt(EvaluationEntity::getRate).average())
+                .averageRate(entity.getEvaluations().stream().mapToInt(EvaluationEntity::getRate).average().orElse(-1))
                 .build();
     }
 }

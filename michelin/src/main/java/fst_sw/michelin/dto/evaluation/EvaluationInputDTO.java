@@ -14,14 +14,10 @@ import lombok.NoArgsConstructor;
 public class EvaluationInputDTO
 {
     @NotBlank
-    @Size(max=50)
-    public String author;
-
-    @NotBlank
     @Size(max=255)
     public String comment;
 
     @Min(0)
-    @Max(10)
+    @Max(3)
     public int rate;
 }
