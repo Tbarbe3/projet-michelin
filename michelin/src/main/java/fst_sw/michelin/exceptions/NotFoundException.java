@@ -1,4 +1,4 @@
-package fst_sw.demo.exceptions;
+package fst_sw.michelin.exceptions;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {
