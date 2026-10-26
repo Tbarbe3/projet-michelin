@@ -1,45 +1,48 @@
-package fst_sw.demo.entities;
+package fst_sw.michelin.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
+import java.util.Collection;
 
 @Entity
-@Table(name="comment")
-public class CommentEntity {
+@Table(name="evaluation")
+public class EvaluationEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")
     @Getter
-    private UUID id;
+    private int id;
 
     @NotBlank
-    @Column(name = "author")
+    @Column(name = "name")
+    @Size(max=50)
     @Getter @Setter
-    private String author;
+    private String name;
 
     @NotBlank
-    @Column(name = "content")
+    @Column(name = "comment")
+    @Size(max=255)
     @Getter @Setter
-    private String content;
+    private String comment;
 
     @Min(0)
-    @Max(10)
+    @Max(3)
     @Column(name = "rate")
     @Getter @Setter
     private int rate;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "serie_id")
+    @JoinColumn(name = "restaurant_id")
     @Getter @Setter
-    private SerieEntity serie;
+    private RestaurantEntity restaurant;
 
-    @Column(name = "screenshot")
+    @Column(name = "dishes_pictures")
     @Getter @Setter
-    private String screenshot;
+    private Collection<String> dishesPictures;
 }
