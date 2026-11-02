@@ -3,10 +3,12 @@ package fst_sw.michelin.controllers;
 import fst_sw.michelin.dto.restaurant.RestaurantInputDTO;
 import fst_sw.michelin.dto.restaurant.RestaurantDTO;
 import fst_sw.michelin.dto.ImageUrlDTO;
+import fst_sw.michelin.dto.restaurant.RestaurantUpdateDTO;
 import fst_sw.michelin.services.RestaurantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,23 +31,22 @@ public class RestaurantController {
         return RestaurantDTO.fromEntity(this.restaurantService.getRestaurant(id));
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
-    public RestaurantDTO addRestaurant(@Valid @RequestBody RestaurantInputDTO restaurant) {
-        return RestaurantDTO.fromEntity(
-                this.restaurantService.createRestaurant(restaurant.name, restaurant.address));
+    public RestaurantDTO addRestaurant(JwtAuthenticationToken auth, @Valid @RequestBody RestaurantInputDTO restaurant) {
+        return RestaurantDTO.fromEntity(this.restaurantService.createRestaurant(auth, restaurant.name, restaurant.address));
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")
-    public void modifyRestaurant(@PathVariable int id, @Valid @RequestBody RestaurantInputDTO restaurant) {
-        this.restaurantService.updateRestaurant(id, restaurant.name, restaurant.address);
+    public void updateRestaurant(JwtAuthenticationToken auth, @PathVariable int id, @Valid @RequestBody RestaurantUpdateDTO restaurant) {
+        this.restaurantService.updateRestaurant(auth, id, restaurant.name, restaurant.address);
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}/image")
-    public ImageUrlDTO addRestaurantImage(@PathVariable int id) {
-        return new ImageUrlDTO(this.restaurantService.createRestaurantImageUploadUrl(id));
+    public ImageUrlDTO addRestaurantImage(JwtAuthenticationToken auth, @PathVariable int id) {
+        return new ImageUrlDTO(this.restaurantService.createRestaurantImageUploadUrl(auth, id));
     }
 
     @GetMapping("/{id}/image")

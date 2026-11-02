@@ -2,14 +2,17 @@ package fst_sw.michelin.services;
 
 import fst_sw.michelin.entities.RestaurantEntity;
 import fst_sw.michelin.exceptions.NotFoundException;
+import fst_sw.michelin.exceptions.ForbiddenException;
 import fst_sw.michelin.repositories.RestaurantRepository;
 import fst_sw.michelin.repositories.S3Repository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+
+import static fst_sw.michelin.config.SecurityConfig.isAdmin;
 
 @RequiredArgsConstructor
 @Service
@@ -25,8 +28,10 @@ public class RestaurantService {
         return this.findRestaurantByID(id);
     }
 
-    @Transactional
-    public RestaurantEntity createRestaurant(String name, String address) {
+    public RestaurantEntity createRestaurant(JwtAuthenticationToken auth, String name, String address) {
+        if (!isAdmin(auth))
+            throw new ForbiddenException("User " + auth.getToken().getClaimAsString("preferred_username") + " is not authorized");
+
         RestaurantEntity restaurant = new RestaurantEntity();
         restaurant.setName(name);
         restaurant.setAddress(address);
@@ -35,8 +40,10 @@ public class RestaurantService {
         return restaurant;
     }
 
-    @Transactional
-    public void updateRestaurant(int id, String name, String address) {
+    public void updateRestaurant(JwtAuthenticationToken auth, int id, String name, String address) {
+        if (!isAdmin(auth))
+            throw new ForbiddenException("User " + auth.getToken().getClaimAsString("preferred_username") + " is not authorized");
+
         RestaurantEntity restaurant = this.findRestaurantByID(id);
 
         if (name != null && !name.isBlank())
@@ -47,8 +54,10 @@ public class RestaurantService {
         this.restaurantRepository.save(restaurant);
     }
 
-    @Transactional
-    public String createRestaurantImageUploadUrl(int id) {
+    public String createRestaurantImageUploadUrl(JwtAuthenticationToken auth, int id) {
+        if (!isAdmin(auth))
+            throw new ForbiddenException("User " + auth.getToken().getClaimAsString("preferred_username") + " is not authorized");
+
         RestaurantEntity restaurant = this.findRestaurantByID(id);
 
         String key = id + "/" + UUID.randomUUID();

@@ -1,4 +1,4 @@
-package fst_sw.demo.services;
+package fst_sw.michelin.services;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -26,15 +26,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class IndexService {
-
     private       DirectoryReader directoryReader;
     private       IndexSearcher   indexSearcher;
     private final IndexWriter     indexWriter;
-    private final QueryParser     commentQueryParser;
+    private final QueryParser     evaluationQueryParser;
 
     public IndexService() throws IOException {
         String    indexDirectoryPath = "index";
@@ -42,28 +40,24 @@ public class IndexService {
         Directory index              = FSDirectory.open(path);
 
         StandardAnalyzer analyzer = new StandardAnalyzer();
-        this.commentQueryParser = new QueryParser("content", analyzer);
+        this.evaluationQueryParser = new QueryParser("content", analyzer);
 
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
         this.indexWriter = new IndexWriter(index, indexWriterConfig);
 
-        if (DirectoryReader.indexExists(index)) {
-            this.directoryReader = DirectoryReader.open(index);
-            this.indexSearcher = new IndexSearcher(directoryReader);
-        } else {
-            // si l'index n'existe pas on le creé
+        if (!DirectoryReader.indexExists(index)) {
             this.indexWriter.commit();
-            this.directoryReader = DirectoryReader.open(index);
-            this.indexSearcher = new IndexSearcher(directoryReader);
         }
+        this.directoryReader = DirectoryReader.open(index);
+        this.indexSearcher = new IndexSearcher(directoryReader);
     }
 
-    public void indexComment(UUID serieId, UUID commentId, String comment) {
+    public void indexEvaluation(int restaurantId, int evaluationId, String evaluation) {
         try {
             Document document = new Document();
-            document.add(new StringField("commentId", String.valueOf(commentId), Field.Store.YES));
-            document.add(new StringField("serieId", String.valueOf(serieId), Field.Store.YES));
-            document.add(new TextField("content", comment, Field.Store.YES));
+            document.add(new StringField("evaluationId", String.valueOf(evaluationId), Field.Store.YES));
+            document.add(new StringField("restaurantId", String.valueOf(restaurantId), Field.Store.YES));
+            document.add(new TextField("content", evaluation, Field.Store.YES));
             this.indexWriter.addDocument(document);
             this.refresh();
         } catch (IOException e) {
@@ -71,35 +65,25 @@ public class IndexService {
         }
     }
 
-    public void deleteComment(UUID commentId) {
+    public void deleteEvaluation(int evaluationId) {
         try {
-            this.indexWriter.deleteDocuments(new Term("commentId", String.valueOf(commentId)));
+            this.indexWriter.deleteDocuments(new Term("evaluationId", String.valueOf(evaluationId)));
             this.refresh();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deleteSerieComments(UUID serieId) {
-        try {
-            this.indexWriter.deleteDocuments(new Term("serieId", String.valueOf(serieId)));
-            this.refresh();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    // Retourne les ids des commentaires de la série qui contiennent le mot
-    public List<UUID> searchComments(UUID serieId, String word) {
+    public List<Integer> searchEvaluations(int restaurantId, String word) {
         try {
             Query query = new BooleanQuery.Builder()
-                    .add(new TermQuery(new Term("serieId", String.valueOf(serieId))), BooleanClause.Occur.MUST)
-                    .add(this.commentQueryParser.parse(QueryParser.escape(word)), BooleanClause.Occur.MUST)
+                    .add(new TermQuery(new Term("restaurantId", String.valueOf(restaurantId))), BooleanClause.Occur.MUST)
+                    .add(this.evaluationQueryParser.parse(QueryParser.escape(word)), BooleanClause.Occur.MUST)
                     .build();
 
-            List<UUID> ids = new ArrayList<>();
+            List<Integer> ids = new ArrayList<>();
             for (ScoreDoc hit : this.indexSearcher.search(query, 100).scoreDocs) {
-                ids.add(UUID.fromString(this.indexSearcher.storedFields().document(hit.doc).get("commentId")));
+                ids.add(Integer.parseInt(this.indexSearcher.storedFields().document(hit.doc).get("evaluationId")));
             }
             return ids;
         } catch (IOException | ParseException e) {
@@ -107,7 +91,6 @@ public class IndexService {
         }
     }
 
-    // Enregistre les modifications et recharge le searcher
     private void refresh() throws IOException {
         this.indexWriter.commit();
 
