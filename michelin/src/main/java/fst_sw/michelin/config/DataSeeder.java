@@ -28,7 +28,11 @@ public class DataSeeder {
             r2.setName("Brasserie L'Excelsior");
             r2.setAddress("50 Rue Henri-Poincaré, 54000 Nancy");
 
-            restaurantRepository.saveAll(List.of(r1, r2));
+            RestaurantEntity r3 = new RestaurantEntity();
+            r2.setName("Louis XV");
+            r2.setAddress("Palais du Gouverneur, Place de la Carrière, 54000 Nancy");
+
+            restaurantRepository.saveAll(List.of(r1, r2, r3));
 
             EvaluationEntity e1 = new EvaluationEntity();
             e1.setRestaurant(r1);
