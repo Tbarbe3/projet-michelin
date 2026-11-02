@@ -48,12 +48,6 @@ public class EvaluationService {
         return this.findEvaluationByID(restaurantId, evaluationId);
     }
 
-    public List<EvaluationEntity> searchEvaluations(int restaurantId, String word) {
-        this.findRestaurantByID(restaurantId); // Pour throw l'exception si le resto is not found
-
-        return this.evaluationRepository.findAllById(this.indexService.searchEvaluations(restaurantId, word));
-    }
-
     public void updateEvaluation(JwtAuthenticationToken auth, int restaurantId, int evaluationId, String comment, Integer rate) {
         EvaluationEntity evaluation = this.findEvaluationByID(restaurantId, evaluationId);
         if (!Objects.equals(evaluation.getAuthor(), auth.getToken().getClaimAsString("preferred_username")) && !isAdmin(auth))
@@ -115,5 +109,9 @@ public class EvaluationService {
 
     public List<EvaluationEntity> getEvaluationsMe(JwtAuthenticationToken auth) {
         return this.evaluationRepository.findByAuthor(auth.getToken().getClaimAsString("preferred_username"));
+    }
+
+    public List<EvaluationEntity> searchEvaluations(String word) {
+        return this.evaluationRepository.findAllById(this.indexService.searchEvaluations(word));
     }
 }

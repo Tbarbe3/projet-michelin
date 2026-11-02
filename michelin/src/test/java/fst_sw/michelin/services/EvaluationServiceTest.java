@@ -118,26 +118,18 @@ class EvaluationServiceTest {
 
     @Test
     void searchEvaluations() {
-        when(this.restaurantRepository.findById(this.data.r1.getId())).thenReturn(Optional.of(this.data.r1));
-        when(this.indexService.searchEvaluations(this.data.r1.getId(), "pizzas")).thenReturn(List.of(this.data.e1.getId()));
+        when(this.indexService.searchEvaluations("pizzas")).thenReturn(List.of(this.data.e1.getId()));
         when(this.evaluationRepository.findAllById(List.of(this.data.e1.getId()))).thenReturn(List.of(this.data.e1));
 
-        assertThat(this.evaluationService.searchEvaluations(this.data.r1.getId(), "pizzas")).containsExactly(this.data.e1);
+        assertThat(this.evaluationService.searchEvaluations("pizzas")).containsExactly(this.data.e1);
     }
 
     @Test
     void searchEvaluations_noMatch() {
-        when(this.restaurantRepository.findById(this.data.r1.getId())).thenReturn(Optional.of(this.data.r1));
-        when(this.indexService.searchEvaluations(this.data.r1.getId(), "sushis")).thenReturn(List.of());
+        when(this.indexService.searchEvaluations("sushis")).thenReturn(List.of());
         when(this.evaluationRepository.findAllById(List.of())).thenReturn(List.of());
 
-        assertThat(this.evaluationService.searchEvaluations(this.data.r1.getId(), "sushis")).isEmpty();
-    }
-
-    @Test
-    void searchEvaluations_notFound() {
-        assertThatThrownBy(() -> this.evaluationService.searchEvaluations(999, "pizzas"))
-                .isInstanceOf(NotFoundException.class);
+        assertThat(this.evaluationService.searchEvaluations("sushis")).isEmpty();
     }
 
     @Test

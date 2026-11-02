@@ -37,13 +37,6 @@ public class EvaluationController {
         return EvaluationDTO.fromEntity(this.evaluationService.addEvaluation(auth, restaurantId, evaluation.comment, evaluation.rate));
     }
 
-    @GetMapping("/restaurants/{restaurantId}/evaluations/search")
-    public List<EvaluationDTO> searchEvaluations(@PathVariable int restaurantId, @RequestParam @NotBlank String word) {
-        return this.evaluationService.searchEvaluations(restaurantId, word).stream()
-                .map(EvaluationDTO::fromEntity)
-                .toList();
-    }
-
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/restaurants/{restaurantId}/evaluations/{evaluationId}")
     public void updateEvaluation(JwtAuthenticationToken auth, @PathVariable int restaurantId, @PathVariable int evaluationId, @Valid @RequestBody EvaluationUpdateDTO evaluation) {
@@ -71,6 +64,13 @@ public class EvaluationController {
     @GetMapping("/evaluations/me")
     public List<EvaluationDTO> getEvaluationsMe(JwtAuthenticationToken auth) {
         return this.evaluationService.getEvaluationsMe(auth).stream()
+                .map(EvaluationDTO::fromEntity)
+                .toList();
+    }
+
+    @GetMapping("/evaluations/search")
+    public List<EvaluationDTO> searchEvaluations(@RequestParam @NotBlank String word) {
+        return this.evaluationService.searchEvaluations(word).stream()
                 .map(EvaluationDTO::fromEntity)
                 .toList();
     }
