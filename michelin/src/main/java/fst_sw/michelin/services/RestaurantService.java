@@ -70,7 +70,7 @@ public class RestaurantService {
     public String getRestaurantImageUrl(int id) {
         String key = this.findRestaurantByID(id).getImage();
         if (key == null)
-            throw new NotFoundException("Restaurant " + id + " has no cover");
+            throw new NotFoundException("Restaurant " + id + " has no image");
 
         return this.s3Repository.getRestaurantImageUrl(key);
     }
