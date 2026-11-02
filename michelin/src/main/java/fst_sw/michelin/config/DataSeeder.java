@@ -32,7 +32,7 @@ public class DataSeeder {
 
             EvaluationEntity e1 = new EvaluationEntity();
             e1.setRestaurant(r1);
-            e1.setAuthor("thomas.barbe8@gmail.com");
+            e1.setAuthor("noel.flantier@michelin.fr");
             e1.setComment("Bonnes pizzas !");
             e1.setRate(3);
 
