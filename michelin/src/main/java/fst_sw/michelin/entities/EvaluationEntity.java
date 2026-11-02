@@ -1,10 +1,7 @@
 package fst_sw.michelin.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -36,9 +33,10 @@ public class EvaluationEntity {
 
     @Min(0)
     @Max(3)
+    @NotNull
     @Column(name = "rate")
     @Getter @Setter
-    private int rate;
+    private Integer rate;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "restaurant_id")

@@ -22,7 +22,7 @@ public class EvaluationDTO {
 
     @Min(0)
     @Max(3)
-    public int rate;
+    public Integer rate;
 
     public static EvaluationDTO fromEntity(EvaluationEntity evaluationEntity) {
         return EvaluationDTO.builder()
