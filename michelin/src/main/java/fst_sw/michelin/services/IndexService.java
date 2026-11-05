@@ -83,12 +83,12 @@ public class IndexService {
             Query query = this.commentQueryParser.parse(QueryParser.escape(word));
             TopDocs topDocs = this.indexSearcher.search(query, 100);
             StoredFields storedFields = this.indexSearcher.storedFields();
-            List<Integer> commentIds = new ArrayList<>();
+            List<Integer> evaluationIds = new ArrayList<>();
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 Document document = storedFields.document(scoreDoc.doc);
-                commentIds.add(Integer.parseInt(document.get("commentId")));
+                evaluationIds.add(Integer.parseInt(document.get("evaluationId")));
             }
-            return commentIds;
+            return evaluationIds;
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }

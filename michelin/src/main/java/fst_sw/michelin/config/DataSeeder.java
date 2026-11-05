@@ -29,8 +29,8 @@ public class DataSeeder {
             r2.setAddress("50 Rue Henri-Poincaré, 54000 Nancy");
 
             RestaurantEntity r3 = new RestaurantEntity();
-            r2.setName("Louis XV");
-            r2.setAddress("Palais du Gouverneur, Place de la Carrière, 54000 Nancy");
+            r3.setName("Louis XV");
+            r3.setAddress("Palais du Gouverneur, Place de la Carrière, 54000 Nancy");
 
             restaurantRepository.saveAll(List.of(r1, r2, r3));
 
