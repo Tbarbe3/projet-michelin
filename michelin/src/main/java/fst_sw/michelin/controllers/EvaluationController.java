@@ -50,7 +50,7 @@ public class EvaluationController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/restaurants/{restaurantId}/evaluations/{evaluationId}/dishesPictures")
+    @PostMapping("/restaurants/{restaurantId}/evaluations/{evaluationId}/dishesPictures")
     public ImageUrlDTO addDishPicture(JwtAuthenticationToken auth, @PathVariable int restaurantId, @PathVariable int evaluationId) {
         return new ImageUrlDTO(this.evaluationService.createDishPictureUploadUrl(auth, restaurantId, evaluationId));
     }
